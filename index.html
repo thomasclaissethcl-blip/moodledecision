@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Assistant de choix d’activité Moodle</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="container header-grid">
+      <div>
+        <p class="eyebrow">Quelle activité pour votre besoin ?</p>
+        <h1>Assistant de choix d’activité Moodle</h1>
+        <p class="lead">Un parcours de décision pour partir du besoin pédagogique, préciser l’action étudiante, identifier la trace attendue, puis obtenir une recommandation d’activité et de paramétrage.</p>
+      </div>
+      <div class="header-card" id="activities-card" aria-label="Activités prises en compte" data-tour-anchor="activitiesScope">
+        <div class="card-title-row">
+          <strong>Activités répertoriées</strong>
+          <button class="context-help-button" type="button" data-help-key="activitiesScope" aria-label="Aide sur les activités prises en compte">?</button>
+        </div>
+        <span>Atelier, Base de données, Devoir, Feedback, Forum, Glossaire, H5P, Leçon, Sondage, Test, Wiki.</span>
+        <button class="button header-tour-button" id="start-tour-button" type="button">Lancer la visite guidée</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container app-layout">
+    <section class="panel main-panel" id="question-panel" aria-labelledby="question-title" data-tour-anchor="questionPanel">
+      <div class="toolbar">
+        <div>
+          <p class="step-label" id="step-label">Étape 1</p>
+          <h2 id="question-title">Chargement…</h2>
+        </div>
+        <div class="toolbar-actions" id="question-navigation" style="margin: auto;" data-tour-anchor="questionNavigation">
+          <button class="context-help-button" type="button" data-help-key="questionPanel" aria-label="Aide sur la question en cours">?</button>
+          <button class="button button-secondary" id="reset-button" type="button" title="Recommencer">⏮️</button>
+          <button class="button button-secondary" id="back-button" type="button" title="Étape précédente">◀️</button>          
+        </div>
+      </div>
+
+      <p id="question-help" class="question-help"></p>
+      <div id="question-options" class="options-grid"></div>
+      <div id="completion-box" class="completion-box hidden">
+        <div class="panel-title-row completion-heading">
+          <h2>Recommandation finale</h2>
+          <button class="context-help-button" type="button" data-help-key="completionBox" aria-label="Aide sur la recommandation finale">?</button>
+        </div>
+        <p>Le parcours est suffisamment renseigné pour proposer une recommandation. Vous pouvez encore revenir sur une réponse pour ajuster le raisonnement.</p>
+        <div id="completion-recommendation" class="completion-recommendation"></div>
+        <button class="button" id="open-recommendation-button" type="button" style="margin: auto;">Voir le détail et les alternatives</button>
+      </div>
+    </section>
+
+    <aside class="side-column" aria-label="Raisonnement et résultat">
+      <section class="panel reasoning-panel" id="reasoning-panel" data-tour-anchor="reasoningPanel">
+        <div class="panel-title-row">
+          <h2>Votre raisonnement</h2>
+          <button class="context-help-button" type="button" data-help-key="reasoningPanel" aria-label="Aide sur le raisonnement en cours">?</button>
+        </div>
+        <ol id="reasoning-list" class="reasoning-list"></ol>
+      </section>
+
+      <section class="panel result-panel" id="result-panel" data-tour-anchor="resultsPanel">
+        <div class="result-header">
+          <div class="panel-title-inline">
+            <h2>Activités recommandées</h2>
+            <button class="context-help-button" type="button" data-help-key="resultsPanel" aria-label="Aide sur les activités recommandées">?</button>
+          </div>
+          <span class="badge" id="function-badge">À préciser</span>
+        </div>
+        <div id="result-list" class="result-list"></div>
+      </section>
+    </aside>
+  </main>
+
+  <section class="container panel settings-panel" id="settings-panel" aria-labelledby="settings-title" data-tour-anchor="settingsPanel">
+    <div class="panel-title-row">
+      <h2 id="settings-title">Conseils de paramétrage associés</h2>
+      <button class="context-help-button" type="button" data-help-key="settingsPanel" aria-label="Aide sur les conseils de paramétrage">?</button>
+    </div>
+    <p class="muted">Ces conseils dépendent de l’activité recommandée et de la fonction dominante repérée : diagnostique, formative ou sommative.</p>
+    <div id="settings-advice" class="settings-advice"></div>
+  </section>
+
+  <footer class="container app-footer">
+    <p>Outil à usage de recommandation uniquement. Les recommandations doivent être vérifiées selon votre scénario, votre contexte d’évaluation et les paramètres réellement activés dans votre Moodle.</p>
+  </footer>
+
+  <div class="modal-backdrop hidden" id="help-modal" role="dialog" aria-modal="true" aria-labelledby="help-modal-title">
+    <div class="modal-panel help-modal-panel" role="document">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow modal-eyebrow">Aide contextuelle</p>
+          <h2 id="help-modal-title">Aide</h2>
+        </div>
+        <button class="icon-button" id="close-help-button" type="button" aria-label="Fermer l’aide">×</button>
+      </div>
+      <div id="help-modal-body" class="modal-content"></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="recommendation-modal" role="dialog" aria-modal="true" aria-labelledby="recommendation-modal-title">
+    <div class="modal-panel" role="document">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow modal-eyebrow">Résultat du parcours</p>
+          <h2 id="recommendation-modal-title">Recommandation détaillée</h2>
+        </div>
+        <button class="icon-button" id="close-recommendation-button" type="button" aria-label="Fermer la recommandation">×</button>
+      </div>
+      <div id="modal-recommendation-content" class="modal-content"></div>
+    </div>
+  </div>
+
+  <script src="js/data/activities.js"></script>
+  <script src="js/data/questions.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/data/help.js"></script>
+  <script src="js/help-tour.js"></script>
+</body>
+</html>
